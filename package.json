@@ -1,0 +1,30 @@
+{
+  "name": "recoverify",
+  "version": "0.0.1",
+  "description": "An abstraction for handling retry strategies, including exponential backoff and custom configurations, for operations that fail.",
+  "main": "recoverify.js",
+  "types": "recoverify.d.ts",
+  "engines": {
+    "node": "18 || 20 || 21"
+  },
+  "readmeFilename": "README.md",
+  "scripts": {
+    "test": "npm run lint && npm run types && node test/unit.js",
+    "types": "tsc -p tsconfig.json",
+    "lint": "eslint . && prettier --check \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.ts\"",
+    "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.ts\""
+  },
+  "keywords": [],
+  "author": "Timur Sevimli <svmlitimur@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/timursevimli/recoverify/issues",
+    "email": "svmlitimur+github@gmail.com"
+  },
+  "homepage": "https://github.com/timursevimli/recoverify#readme",
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3"
+  }
+}
