@@ -5,7 +5,7 @@
   "main": "recoverify.js",
   "types": "recoverify.d.ts",
   "engines": {
-    "node": "18 || 20 || 21"
+    "node": "18 || 20 || 22"
   },
   "readmeFilename": "README.md",
   "scripts": {
