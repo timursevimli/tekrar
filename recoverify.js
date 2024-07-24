@@ -6,6 +6,7 @@ const recoverify = (options = {}) => {
     recovery = null,
     handleRecovery = false,
     count = 3,
+    message = 'Too many tries',
   } = options;
 
   const errors = [];
@@ -28,7 +29,7 @@ const recoverify = (options = {}) => {
         }
       }
     }
-    const finallyError = new Error('Too many tries');
+    const finallyError = new Error(message);
     throw new AggregateError([...errors, finallyError]);
   };
 };
