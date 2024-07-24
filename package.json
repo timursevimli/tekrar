@@ -1,6 +1,6 @@
 {
   "name": "recoverify",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An abstraction for handling retry strategies, including exponential backoff and custom configurations, for operations that fail.",
   "main": "recoverify.js",
   "types": "recoverify.d.ts",
