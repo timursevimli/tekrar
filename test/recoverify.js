@@ -48,11 +48,11 @@ test('should succeed after recovery', async () => {
   assert.strictEqual(result, 'success');
 });
 
-test('should throw AggregateError after exceeding tryCount', async () => {
+test('should throw AggregateError after exceeding count', async () => {
   const task = async () => {
     throw new Error('fail');
   };
-  const wrappedTask = recoverify({ task, tryCount: 2 });
+  const wrappedTask = recoverify({ task, count: 2 });
 
   await assert.rejects(wrappedTask(), (err) => {
     assert(err instanceof AggregateError);
@@ -75,7 +75,7 @@ test('should handle recovery failure and throw AggregateError', async () => {
     task,
     recovery,
     handleRecovery: true,
-    tryCount: 2,
+    count: 2,
   });
 
   await assert.rejects(wrappedTask(), (err) => {
