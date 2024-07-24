@@ -90,3 +90,27 @@ test('should handle recovery failure and throw AggregateError', async () => {
     return true;
   });
 });
+
+test('should handle recovery failure with custom error message', async () => {
+  const task = async () => {
+    throw new Error('fail');
+  };
+  const recovery = async () => {
+    throw new Error('recovery fail');
+  };
+  const wrappedTask = recoverify({
+    task,
+    recovery,
+    handleRecovery: true,
+    count: 1,
+    message: 'custom error message',
+  });
+
+  await assert.rejects(wrappedTask(), (err) => {
+    const { errors } = err;
+    assert.strictEqual(errors[0].message, 'fail');
+    assert.strictEqual(errors[1].message, 'recovery fail');
+    assert.strictEqual(errors[2].message, 'custom error message');
+    return true;
+  });
+});
