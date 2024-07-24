@@ -5,14 +5,14 @@ const recoverify = (options = {}) => {
     task = null,
     recovery = null,
     handleRecovery = false,
-    tryCount = 3,
+    count = 3,
   } = options;
 
   const errors = [];
-  let count = 0;
+  let tryCount = 0;
 
   return async (...args) => {
-    while (count++ < tryCount) {
+    while (tryCount++ < count) {
       try {
         const res = await task(...args);
         return res;
