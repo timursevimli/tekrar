@@ -5,7 +5,7 @@ const recoverify = (options = {}) => {
     task = null,
     recovery = null,
     handleRecovery = false,
-    count = 3,
+    count = 1,
   } = options;
 
   const errors = [];

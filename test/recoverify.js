@@ -20,13 +20,29 @@ test('should succeed on first try (sync)', async () => {
   assert.strictEqual(result, 'success');
 });
 
+test('should fail on first try (sync)', async () => {
+  const task = () => {
+    throw new Error('fail');
+  };
+  const wrappedTask = recoverify({ task });
+
+  try {
+    await wrappedTask();
+    assert.fail('never should be here');
+  } catch (err) {
+    assert(err instanceof AggregateError);
+    assert.strictEqual(err.errors.length, 1);
+    assert.strictEqual(err.errors[0].message, 'fail');
+  }
+});
+
 test('should succeed on second try after one failure', async () => {
   let attempts = 0;
   const task = async () => {
     if (attempts++ < 1) throw new Error('fail');
     return 'success';
   };
-  const wrappedTask = recoverify({ task });
+  const wrappedTask = recoverify({ task, count: 3 });
 
   const result = await wrappedTask();
   assert.strictEqual(result, 'success');
@@ -42,7 +58,13 @@ test('should succeed after recovery', async () => {
   const recovery = async () => {
     if (recoveryAttempts++ < 1) throw new Error('recovery fail');
   };
-  const wrappedTask = recoverify({ task, recovery, handleRecovery: true });
+  const options = {
+    task,
+    recovery,
+    handleRecovery: true,
+    count: 3,
+  };
+  const wrappedTask = recoverify(options);
 
   const result = await wrappedTask();
   assert.strictEqual(result, 'success');
