@@ -12,6 +12,20 @@ test('should succeed on first try (async)', async () => {
   assert.strictEqual(result, 'success');
 });
 
+test('should fail on first try (async)', async () => {
+  const task = async () => {
+    throw new Error('fail');
+  };
+  const wrappedTask = recoverify({ task });
+
+  await assert.rejects(wrappedTask(), (err) => {
+    assert(err instanceof AggregateError);
+    assert.strictEqual(err.errors.length, 1);
+    assert.strictEqual(err.errors[0].message, 'fail');
+    return true;
+  });
+});
+
 test('should succeed on first try (sync)', async () => {
   const task = () => 'success';
   const wrappedTask = recoverify({ task });
