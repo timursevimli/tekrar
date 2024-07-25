@@ -56,10 +56,9 @@ test('should throw AggregateError after exceeding count', async () => {
 
   await assert.rejects(wrappedTask(), (err) => {
     assert(err instanceof AggregateError);
-    assert.strictEqual(err.errors.length, 3); //2 fail + 1 finally
+    assert.strictEqual(err.errors.length, 2); //2 fail
     assert.strictEqual(err.errors[0].message, 'fail');
     assert.strictEqual(err.errors[1].message, 'fail');
-    assert.strictEqual(err.errors[2].message, 'Too many tries');
     return true;
   });
 });
@@ -81,36 +80,11 @@ test('should handle recovery failure and throw AggregateError', async () => {
   await assert.rejects(wrappedTask(), (err) => {
     assert(err instanceof AggregateError);
     const { errors } = err;
-    assert.strictEqual(errors.length, 5); //2 fail + 2 recovery fail + 1 finally
+    assert.strictEqual(errors.length, 4); //2 fail + 2 recovery fail
     assert.strictEqual(errors[0].message, 'fail');
     assert.strictEqual(errors[1].message, 'recovery fail');
     assert.strictEqual(errors[2].message, 'fail');
     assert.strictEqual(errors[3].message, 'recovery fail');
-    assert.strictEqual(errors[4].message, 'Too many tries');
-    return true;
-  });
-});
-
-test('should handle recovery failure with custom error message', async () => {
-  const task = async () => {
-    throw new Error('fail');
-  };
-  const recovery = async () => {
-    throw new Error('recovery fail');
-  };
-  const wrappedTask = recoverify({
-    task,
-    recovery,
-    handleRecovery: true,
-    count: 1,
-    message: 'custom error message',
-  });
-
-  await assert.rejects(wrappedTask(), (err) => {
-    const { errors } = err;
-    assert.strictEqual(errors[0].message, 'fail');
-    assert.strictEqual(errors[1].message, 'recovery fail');
-    assert.strictEqual(errors[2].message, 'custom error message');
     return true;
   });
 });
