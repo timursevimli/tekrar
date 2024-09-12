@@ -1,6 +1,6 @@
 {
   "name": "retry",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "An abstraction for handling retry strategies, including exponential backoff and custom configurations, for operations that fail.",
   "main": "retry.js",
   "types": "retry.d.ts",
