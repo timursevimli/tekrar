@@ -1,11 +1,11 @@
 {
-  "name": "recoverify",
+  "name": "retry",
   "version": "0.0.2",
   "description": "An abstraction for handling retry strategies, including exponential backoff and custom configurations, for operations that fail.",
-  "main": "recoverify.js",
-  "types": "recoverify.d.ts",
+  "main": "retry.js",
+  "types": "retry.d.ts",
   "engines": {
-    "node": "18 || 20 || 22"
+    "node": "16 || 18 || 20 || 22"
   },
   "readmeFilename": "README.md",
   "scripts": {
@@ -18,10 +18,10 @@
   "author": "Timur Sevimli <svmlitimur@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/timursevimli/recoverify/issues",
+    "url": "https://github.com/timursevimli/retry/issues",
     "email": "svmlitimur+github@gmail.com"
   },
-  "homepage": "https://github.com/timursevimli/recoverify#readme",
+  "homepage": "https://github.com/timursevimli/retry#readme",
   "devDependencies": {
     "eslint": "^8.56.0",
     "prettier": "^3.1.1",
