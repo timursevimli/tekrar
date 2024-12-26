@@ -1,5 +1,7 @@
 'use strict';
 
+const sleep = (ms) => new Promise((r) => void setTimeout(r, ms));
+
 const retry = (task, options = {}) => {
   if (!task) throw new Error('task is required');
   return async (...args) => {
@@ -11,9 +13,7 @@ const retry = (task, options = {}) => {
     const errors = [];
     let retries = 0;
     while (retries++ < count) {
-      if (delay > 0) {
-        await new Promise((r) => void setTimeout(r, delay));
-      }
+      if (delay > 0) await sleep(delay);
       try {
         return await task(...args);
       } catch (error) {
