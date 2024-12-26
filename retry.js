@@ -9,6 +9,7 @@ const retry = (task, options = {}) => {
       recovery = () => Promise.resolve(),
       count = 1,
       delay = 0,
+      onError = () => {},
     } = options;
     const errors = [];
     let retries = 0;
@@ -18,6 +19,7 @@ const retry = (task, options = {}) => {
         return await task(...args);
       } catch (error) {
         errors.push(error);
+        onError(error);
       }
       try {
         await recovery(...args);

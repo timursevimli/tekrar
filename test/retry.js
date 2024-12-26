@@ -144,3 +144,20 @@ test('should debounce', async () => {
   await retry(task, options)().catch(() => {});
   assert.strictEqual(failed, false);
 });
+
+test('should on error', async () => {
+  const task = async () => {
+    throw new Error('fail');
+  };
+  const options = {
+    onError: (error) => {
+      assert.strictEqual(error.message, 'fail');
+    },
+  };
+
+  await retry(task, options)().catch((err) => {
+    assert(err instanceof AggregateError);
+    assert.strictEqual(err.errors.length, 1);
+    assert.strictEqual(err.errors[0].message, 'fail');
+  });
+});
