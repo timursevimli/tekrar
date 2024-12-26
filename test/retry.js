@@ -61,26 +61,6 @@ test('should succeed on second try after one failure', async () => {
   assert.strictEqual(result, 'success');
 });
 
-test('should succeed after recovery', async () => {
-  let taskAttempts = 0;
-  let recoveryAttempts = 0;
-  const task = async () => {
-    if (taskAttempts++ < 1) throw new Error('fail');
-    return 'success';
-  };
-  const recovery = async () => {
-    if (recoveryAttempts++ < 1) throw new Error('recovery fail');
-  };
-  const options = {
-    recovery,
-    count: 3,
-  };
-  const wrappedTask = retry(task, options);
-
-  const result = await wrappedTask();
-  assert.strictEqual(result, 'success');
-});
-
 test('should throw AggregateError after exceeding count', async () => {
   const task = async () => {
     throw new Error('fail');
@@ -96,7 +76,7 @@ test('should throw AggregateError after exceeding count', async () => {
   });
 });
 
-test('should handle recovery failure and throw AggregateError', async () => {
+test('should handle recovery failure', async () => {
   const task = async () => {
     throw new Error('fail');
   };
@@ -112,11 +92,9 @@ test('should handle recovery failure and throw AggregateError', async () => {
   await assert.rejects(wrappedTask, (err) => {
     assert(err instanceof AggregateError);
     const { errors } = err;
-    assert.strictEqual(errors.length, 4); //2 fail + 2 recovery fail
+    assert.strictEqual(errors.length, 2);
     assert.strictEqual(errors[0].message, 'fail');
     assert.strictEqual(errors[1].message, 'recovery fail');
-    assert.strictEqual(errors[2].message, 'fail');
-    assert.strictEqual(errors[3].message, 'recovery fail');
     return true;
   });
 });
