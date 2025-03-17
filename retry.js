@@ -25,9 +25,10 @@ const retry = (task, options = {}) => {
         await recovery(...args);
       } catch (error) {
         errors.push(error);
+        throw new AggregateError(errors);
       }
     }
-    throw new AggregateError([...errors]);
+    throw new AggregateError(errors);
   };
 };
 
