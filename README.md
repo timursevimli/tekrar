@@ -1,10 +1,12 @@
-# Retry
+# Tekrar
 
-[![npm version](https://img.shields.io/npm/v/retry.svg)](https://www.npmjs.com/package/retry)
+[![npm version](https://img.shields.io/npm/v/tekrar.svg)](https://www.npmjs.com/package/tekrar)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js CI](https://github.com/timursevimli/retry/actions/workflows/node.js.yml/badge.svg)](https://github.com/timursevimli/retry/actions/workflows/node.js.yml)
+[![Node.js CI](https://github.com/timursevimli/tekrar/actions/workflows/node.js.yml/badge.svg)](https://github.com/timursevimli/tekrar/actions/workflows/node.js.yml)
 
 An abstraction for handling retry strategies, including exponential backoff and custom configurations, for operations that fail.
+
+> **Note:** "Tekrar" means "repeat" or "retry" in Turkish, reflecting the module's purpose.
 
 ## Features
 
@@ -17,7 +19,7 @@ An abstraction for handling retry strategies, including exponential backoff and 
 ## Installation
 
 ```bash
-npm install retry
+npm install tekrar
 ```
 
 ## Usage
@@ -25,10 +27,10 @@ npm install retry
 ### Basic Usage
 
 ```javascript
-const retry = require('retry');
+const tekrar = require('tekrar');
 
 // Wrap a function that might fail
-const fetchData = retry(
+const fetchData = tekrar(
   async () => {
     const response = await fetch('https://api.example.com/data');
     if (!response.ok) throw new Error('API request failed');
@@ -49,9 +51,9 @@ try {
 ### With Recovery Function
 
 ```javascript
-const retry = require('retry');
+const tekrar = require('tekrar');
 
-const sendEmail = retry(
+const sendEmail = tekrar(
   async (recipient, content) => {
     // Email sending logic that might fail
     return emailService.send(recipient, content);
@@ -82,7 +84,7 @@ try {
 
 ## API
 
-### retry(task, options)
+### tekrar(task, options)
 
 Creates a wrapped function that will retry the given task according to the specified options.
 
@@ -108,13 +110,13 @@ If all retry attempts fail, the function throws an `AggregateError` containing a
 ### Retry with Exponential Backoff
 
 ```javascript
-const retry = require('retry');
+const tekrar = require('tekrar');
 
 // Helper function to implement exponential backoff
 const withExponentialBackoff = (fn, maxRetries = 5) => {
   let retries = 0;
 
-  const execute = retry(fn, {
+  const execute = tekrar(fn, {
     count: maxRetries,
     delay: 0, // We'll handle the delay in the recovery function
     recovery: async (...args) => {

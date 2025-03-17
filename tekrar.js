@@ -2,7 +2,7 @@
 
 const sleep = (ms) => new Promise((r) => void setTimeout(r, ms));
 
-const retry = (task, options = {}) => {
+const tekrar = (task, options = {}) => {
   if (!task) throw new Error('task is required');
   return async (...args) => {
     const {
@@ -32,4 +32,4 @@ const retry = (task, options = {}) => {
   };
 };
 
-module.exports = retry;
+module.exports = tekrar;

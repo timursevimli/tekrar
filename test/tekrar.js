@@ -2,11 +2,11 @@
 
 const assert = require('node:assert');
 const test = require('node:test');
-const retry = require('../retry.js');
+const tekrar = require('../tekrar.js');
 
 test('should succeed on first try (async)', async () => {
   const task = async () => 'success';
-  const wrappedTask = retry(task);
+  const wrappedTask = tekrar(task);
 
   const result = await wrappedTask();
   assert.strictEqual(result, 'success');
@@ -16,7 +16,7 @@ test('should fail on first try (async)', async () => {
   const task = async () => {
     throw new Error('fail');
   };
-  const wrappedTask = retry(task);
+  const wrappedTask = tekrar(task);
 
   await assert.rejects(wrappedTask, (err) => {
     assert(err instanceof AggregateError);
@@ -28,7 +28,7 @@ test('should fail on first try (async)', async () => {
 
 test('should succeed on first try (sync)', async () => {
   const task = () => 'success';
-  const wrappedTask = retry(task);
+  const wrappedTask = tekrar(task);
 
   const result = await wrappedTask();
   assert.strictEqual(result, 'success');
@@ -38,7 +38,7 @@ test('should fail on first try (sync)', async () => {
   const task = () => {
     throw new Error('fail');
   };
-  const wrappedTask = retry(task);
+  const wrappedTask = tekrar(task);
   try {
     await wrappedTask();
     assert.fail('never should be here');
@@ -55,7 +55,7 @@ test('should succeed on second try after one failure', async () => {
     if (attempts++ < 1) throw new Error('fail');
     return 'success';
   };
-  const wrappedTask = retry(task, { count: 3 });
+  const wrappedTask = tekrar(task, { count: 3 });
 
   const result = await wrappedTask();
   assert.strictEqual(result, 'success');
@@ -65,7 +65,7 @@ test('should throw AggregateError after exceeding count', async () => {
   const task = async () => {
     throw new Error('fail');
   };
-  const wrappedTask = retry(task, { count: 2 });
+  const wrappedTask = tekrar(task, { count: 2 });
 
   await assert.rejects(wrappedTask, (err) => {
     assert(err instanceof AggregateError);
@@ -87,7 +87,7 @@ test('should handle recovery failure', async () => {
     recovery,
     count: 2,
   };
-  const wrappedTask = retry(task, options);
+  const wrappedTask = tekrar(task, options);
 
   await assert.rejects(wrappedTask, (err) => {
     assert(err instanceof AggregateError);
@@ -119,7 +119,7 @@ test('should debounce', async () => {
     count: 2,
     delay,
   };
-  await retry(task, options)().catch(() => {});
+  await tekrar(task, options)().catch(() => {});
   assert.strictEqual(failed, false);
 });
 
@@ -133,7 +133,7 @@ test('should on error', async () => {
     },
   };
 
-  await retry(task, options)().catch((err) => {
+  await tekrar(task, options)().catch((err) => {
     assert(err instanceof AggregateError);
     assert.strictEqual(err.errors.length, 1);
     assert.strictEqual(err.errors[0].message, 'fail');

@@ -1,9 +1,9 @@
 {
-  "name": "retry",
+  "name": "tekrar",
   "version": "0.0.3",
   "description": "An abstraction for handling retry strategies, including exponential backoff and custom configurations, for operations that fail.",
-  "main": "retry.js",
-  "types": "retry.d.ts",
+  "main": "tekrar.js",
+  "types": "tekrar.d.ts",
   "engines": {
     "node": "16 || 18 || 20 || 22"
   },
@@ -14,14 +14,27 @@
     "lint": "eslint . && prettier --check \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\"",
     "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.ts\""
   },
-  "keywords": [],
+  "keywords": [
+    "retry",
+    "backoff",
+    "exponential",
+    "async",
+    "promise",
+    "error-handling",
+    "resilience",
+    "tekrar"
+  ],
   "author": "Timur Sevimli <svmlitimur@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/timursevimli/retry/issues",
+    "url": "https://github.com/timursevimli/tekrar/issues",
     "email": "svmlitimur+github@gmail.com"
   },
-  "homepage": "https://github.com/timursevimli/retry#readme",
+  "homepage": "https://github.com/timursevimli/tekrar#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timursevimli/tekrar.git"
+  },
   "devDependencies": {
     "eslint": "^8.56.0",
     "prettier": "^3.1.1",
