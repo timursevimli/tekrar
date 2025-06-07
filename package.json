@@ -1,11 +1,11 @@
 {
   "name": "tekrar",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "An abstraction for handling retry strategies, including exponential backoff and custom configurations, for operations that fail.",
   "main": "tekrar.js",
   "types": "tekrar.d.ts",
   "engines": {
-    "node": "16 || 18 || 20 || 22"
+    "node": "16 || 18 || 20 || 22 || 24"
   },
   "readmeFilename": "README.md",
   "scripts": {
