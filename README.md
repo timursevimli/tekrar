@@ -1,8 +1,10 @@
 # Tekrar
 
-[![npm version](https://img.shields.io/npm/v/tekrar.svg)](https://www.npmjs.com/package/tekrar)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js CI](https://github.com/timursevimli/tekrar/actions/workflows/node.js.yml/badge.svg)](https://github.com/timursevimli/tekrar/actions/workflows/node.js.yml)
+[![ci Status](https://github.com/timursevimli/tekrar/workflows/Testing%20CI/badge.svg)](https://github.com/timursevimli/tekrar/actions?query=workflow%3A%22Testing+CI%22+branch%3Amaster)
+[![snyk](https://snyk.io/test/github/timursevimli/tekrar/badge.svg)](https://snyk.io/test/github/timursevimli/tekrar)
+[![npm downloads/month](https://img.shields.io/npm/dm/tekrar.svg)](https://www.npmjs.com/package/tekrar)
+[![npm downloads](https://img.shields.io/npm/dt/tekrar.svg)](https://www.npmjs.com/package/tekrar)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/timursevimli/tekrar/blob/master/LICENSE)
 
 An abstraction for handling retry strategies, including exponential backoff and custom configurations, for operations that fail.
 
