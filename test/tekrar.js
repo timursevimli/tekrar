@@ -102,7 +102,7 @@ test('should handle recovery failure', async () => {
 test('should debounce', async () => {
   let failed = false;
   const delay = 100;
-  let begin = Date.now();
+  let begin = Date.now() - 10;
   const task = () => {
     if (Date.now() - begin < delay) {
       failed = true;
@@ -110,7 +110,7 @@ test('should debounce', async () => {
     return Promise.reject('fail');
   };
   const recovery = () => {
-    begin = Date.now();
+    begin = Date.now() - 10;
     return Promise.reject('recovery fail');
   };
   const options = {
