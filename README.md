@@ -15,6 +15,7 @@ An abstraction for handling retry strategies, including exponential backoff and 
 - Simple and lightweight retry mechanism
 - Support for both synchronous and asynchronous functions
 - Configurable retry count and delay
+- Timeout support to limit maximum running time
 - Custom error handling and recovery functions
 - TypeScript support
 
@@ -96,6 +97,7 @@ Creates a wrapped function that will retry the given task according to the speci
 - `options` (Object, optional): Configuration options for retry behavior.
   - `count` (Number, default: 1): Maximum number of retry attempts.
   - `delay` (Number, default: 0): Delay in milliseconds between retry attempts.
+  - `timeout` (Number, default: 0): Maximum time in milliseconds for all retry attempts to complete. If exceeded, throws a `Timeout Error`. Must be greater than `delay`. Set to `0` to disable.
   - `recovery` (Function, default: () => Promise.resolve()): Function called after each failed attempt, before the next retry. Receives the same arguments as the task.
   - `onError` (Function, default: () => {}): Function called with each error that occurs. Useful for logging or monitoring.
 
@@ -143,6 +145,39 @@ const fetchWithRetry = withExponentialBackoff(async (url) => {
 fetchWithRetry('https://api.example.com/data')
   .then((data) => console.log('Success:', data))
   .catch((error) => console.error('All retries failed:', error));
+```
+
+### With Timeout
+
+```javascript
+const tekrar = require('tekrar');
+
+const fetchData = tekrar(
+  async () => {
+    const response = await fetch('https://api.example.com/data');
+    if (!response.ok) throw new Error('API request failed');
+    return response.json();
+  },
+  {
+    count: 5,
+    delay: 500,
+    timeout: 3000, // Give up after 3 seconds total
+    onError: (error) => {
+      console.error('Attempt failed:', error.message);
+    },
+  },
+);
+
+try {
+  const data = await fetchData();
+  console.log('Data:', data);
+} catch (error) {
+  if (error.message === 'Timeout Error') {
+    console.error('Operation timed out after 3 seconds');
+  } else {
+    console.error('All retries failed:', error);
+  }
+}
 ```
 
 ## License
