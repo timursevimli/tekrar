@@ -139,3 +139,56 @@ test('should on error', async () => {
     assert.strictEqual(err.errors[0].message, 'fail');
   });
 });
+
+test('should throw when delay >= timeout', async () => {
+  const task = async () => 'success';
+  const check = (err) => {
+    assert(err instanceof Error);
+    assert.strictEqual(err.message, 'delay should be less than timeout');
+    return true;
+  };
+
+  await assert.rejects(tekrar(task, { timeout: 100, delay: 100 })(), check);
+  await assert.rejects(tekrar(task, { timeout: 100, delay: 200 })(), check);
+});
+
+test('should succeed when task completes within timeout', async () => {
+  const task = async () => 'success';
+  const wrappedTask = tekrar(task, { timeout: 500 });
+
+  const result = await wrappedTask();
+  assert.strictEqual(result, 'success');
+});
+
+test('should throw Timeout Error when task exceeds timeout', async () => {
+  const task = () => new Promise((resolve) => setTimeout(resolve, 300));
+  const wrappedTask = tekrar(task, { timeout: 50 });
+
+  await assert.rejects(wrappedTask, (err) => {
+    assert(err instanceof Error);
+    assert.strictEqual(err.message, 'Timeout Error');
+    return true;
+  });
+});
+
+test('should throw Timeout Error during retries', async () => {
+  const task = async () => {
+    throw new Error('fail');
+  };
+  const recovery = () => new Promise((resolve) => setTimeout(resolve, 200));
+  const wrappedTask = tekrar(task, { timeout: 50, count: 5, recovery });
+
+  await assert.rejects(wrappedTask, (err) => {
+    assert(err instanceof Error);
+    assert.strictEqual(err.message, 'Timeout Error');
+    return true;
+  });
+});
+
+test('should pass args to task when using timeout', async () => {
+  const task = async (a, b) => a + b;
+  const wrappedTask = tekrar(task, { timeout: 500 });
+
+  const result = await wrappedTask(2, 3);
+  assert.strictEqual(result, 5);
+});

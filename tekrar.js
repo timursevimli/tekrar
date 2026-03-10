@@ -10,25 +10,37 @@ const tekrar = (task, options = {}) => {
       count = 1,
       delay = 0,
       onError = () => {},
+      timeout = 0,
     } = options;
-    const errors = [];
     let retries = 0;
-    while (retries++ < count) {
-      if (delay > 0) await sleep(delay);
-      try {
-        return await task(...args);
-      } catch (error) {
-        errors.push(error);
-        onError(error);
+    const exec = async () => {
+      const errors = [];
+      while (retries++ < count) {
+        if (delay > 0) await sleep(delay);
+        try {
+          return await task(...args);
+        } catch (error) {
+          errors.push(error);
+          onError(error);
+        }
+        try {
+          await recovery(...args);
+        } catch (error) {
+          errors.push(error);
+          onError(error);
+          break;
+        }
       }
-      try {
-        await recovery(...args);
-      } catch (error) {
-        errors.push(error);
-        throw new AggregateError(errors);
-      }
-    }
-    throw new AggregateError(errors);
+      throw new AggregateError(errors);
+    };
+    if (timeout === 0) return await exec();
+    if (delay >= timeout) throw new Error('delay should be less than timeout');
+    return await Promise.race([
+      exec(),
+      sleep(timeout).then(() => {
+        throw new Error('Timeout Error');
+      }),
+    ]);
   };
 };
 
